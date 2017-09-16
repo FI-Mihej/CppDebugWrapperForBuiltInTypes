@@ -41,9 +41,6 @@ public:
 	{
 		std::cout << "\t\t>> Destructed" << " [ " << value << " ]; " << std::endl;
 	}
-
-protected:
-	UniWrapperCallbacksNames callbackNames;
 };
 
 //==================================================================================

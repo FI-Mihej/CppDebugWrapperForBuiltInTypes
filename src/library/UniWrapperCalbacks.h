@@ -62,6 +62,9 @@ public:
 	virtual void constRefferenceToValueReturned(T value) {};
 	virtual void valueWasRead(T value) {};
 	virtual void refferenceToTheItemOfTheArrayValueReturned(T value) {};  // Value is an array. Refference to the value[index] was returned.
+
+protected:
+	UniWrapperCallbacksNames callbackNames;
 };
 
 //==================================================================================
