@@ -18,134 +18,6 @@ class NotImplementedException : public std::exception
 
 //==================================================================================
 
-//template<typename T>
-//class IntDivAppropriate
-//{
-//public:
-//	T value(T a, T b)
-//	{
-//		return a % b;
-//	}
-//
-//	void link(T& a, T& b)
-//	{
-//		a %= b;
-//	}
-//};
-//
-//
-//template<typename T>
-//class IntDivNotAppropriate
-//{
-//public:
-//	T value(T& a, T& b)
-//	{
-//		throw NotImplementedException();
-//		return a;
-//	}
-//
-//	void link(T& a, T& b)
-//	{
-//		throw NotImplementedException();
-//	}
-//};
-//
-//////==================================================================================
-////
-////template<typename T>
-////class IntPlusAppropriate
-////{
-////public:
-////	T value(T a, T b)
-////	{
-////		return a + b;
-////	}
-////
-////	void link(T& a, T& b)
-////	{
-////		a += b;
-////	}
-////};
-////
-////
-////template<typename T>
-////class IntPlusNotAppropriate
-////{
-////public:
-////	T value(T& a, T& b)
-////	{
-////		throw NotImplementedException();
-////		return a;
-////	}
-////
-////	void link(T& a, T& b)
-////	{
-////		throw NotImplementedException();
-////	}
-////};
-////
-//////==================================================================================
-////
-////template<typename T>
-////class IntMinuxAppropriate
-////{
-////public:
-////	T value(T a, T b)
-////	{
-////		return a + b;
-////	}
-////
-////	void link(T& a, T& b)
-////	{
-////		a += b;
-////	}
-////};
-////
-////
-////template<typename T>
-////class IntMinusNotAppropriate
-////{
-////public:
-////	T value(T& a, T& b)
-////	{
-////		throw NotImplementedException();
-////		return a;
-////	}
-////
-////	void link(T& a, T& b)
-////	{
-////		throw NotImplementedException();
-////	}
-////};
-//
-////==================================================================================
-//
-//template<typename T>
-//class ArrayAccessAppropriate
-//{
-//	using ItemRefType = typename std::add_lvalue_reference<typename std::remove_pointer<typename T>::type>::type;
-//
-//	ItemRefType item(T pointer, std::size_t idx)
-//	{
-//		return pointer[idx];
-//	}
-//};
-//
-//
-//template<typename T>
-//class ArrayAccessNotAppropriate
-//{
-//	using ItemRefType = typename std::add_lvalue_reference<typename std::remove_pointer<typename T>::type>::type;
-//
-//	ItemRefType item(T pointer, std::size_t idx)
-//	{
-//		throw NotImplementedException();
-//		return pointer;
-//	}
-//};
-
-//==================================================================================
-
 template<typename T>
 class UniWrapperFundamental
 {
@@ -270,25 +142,6 @@ public:
 		return *this;
 	}
 
-	//using ItemRefType = typename std::add_lvalue_reference<typename std::remove_pointer<typename T>::type>::type;
-
-	//ItemRefType operator[](std::size_t idx)
-	//{
-	//	typedef std::conditional<std::is_pointer<T>::value, ArrayAccessAppropriate<T>, ArrayAccessNotAppropriate<T> >::type ArrayAccess;
-	//	ArrayAccess arrayAccess;
-	//	_refferenceToTheItemOfTheArrayValueReturned();
-	//	return arrayAccess.item(value, idx);
-	//	//return value[idx];
-	//}
-	//const ItemRefType operator[](std::size_t idx) const
-	//{
-	//	typedef std::conditional<std::is_pointer<T>::value, ArrayAccessAppropriate<T>, ArrayAccessNotAppropriate<T> >::type ArrayAccess;
-	//	ArrayAccess arrayAccess;
-	//	_refferenceToTheItemOfTheArrayValueReturned();
-	//	return arrayAccess.item(value, idx);
-	//	//return value[idx];
-	//}
-
 	using PointerType = typename std::add_pointer<typename T>::type;
 
 	PointerType operator&() throw()
@@ -337,40 +190,6 @@ public:
 		_valueModified();
 		return *this;
 	}
-	//UniWrapperFundamental<T>& UniWrapperFundamental::operator%=(UniWrapperFundamental<T> rOperand) {
-	//	typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-
-	//	IntDiv intDiv;
-	//	intDiv.link(value, rOperand.value);
-	//	//value %= rOperand.value;
-	//	_valueModified();
-	//	return *this;
-	//}
-
-	//UniWrapperFundamental<T>& UniWrapperFundamental::operator+=(const T& rOperand) {
-	//	value += rOperand;
-	//	return *this;
-	//}
-	//UniWrapperFundamental<T>& UniWrapperFundamental::operator-=(const T& rOperand) {
-	//	value -= rOperand;
-	//	return *this;
-	//}
-	//UniWrapperFundamental<T>& UniWrapperFundamental::operator*=(const T& rOperand) {
-	//	value *= rOperand;
-	//	return *this;
-	//}
-	//UniWrapperFundamental<T>& UniWrapperFundamental::operator/=(const T& rOperand) {
-	//	value /= rOperand;
-	//	return *this;
-	//}
-	//UniWrapperFundamental<T>& UniWrapperFundamental::operator%=(std::add_const<T>::type& rOperand) {
-	//	typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-
-	//	IntDiv intDiv;
-	//	intDiv.link(value, rOperand);
-	//	//value %= rOperand;
-	//	return *this;
-	//}
 
 	UniWrapperFundamental<T>& UniWrapperFundamental::operator++() {
 		++value;
@@ -400,13 +219,6 @@ template<typename T> UniWrapperFundamental<T> operator*(UniWrapperFundamental<T>
 template<typename T> UniWrapperFundamental<T> operator/(UniWrapperFundamental<T> lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() / rOperand.getValueConstRef());
 }
-//template<typename T> UniWrapperFundamental<T> operator%(UniWrapperFundamental<T> lOperand, UniWrapperFundamental<T> rOperand) {
-//	typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-//
-//	IntDiv intDiv;
-//	return UniWrapperFundamental<T>(intDiv.value(lOperand.getValueConstRef(), rOperand.getValueConstRef()));
-//	//return UniWrapperFundamental<T>(lOperand.getValueRef() % rOperand.getValueRef());
-//}
 
 template<typename T> UniWrapperFundamental<T> operator+(const T& lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand + rOperand.getValueConstRef());
@@ -420,13 +232,6 @@ template<typename T> UniWrapperFundamental<T> operator*(const T& lOperand, UniWr
 template<typename T> UniWrapperFundamental<T> operator/(const T& lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand / rOperand.getValueConstRef());
 }
-//template<typename T> UniWrapperFundamental<T> operator%(const T& lOperand, UniWrapperFundamental<T> rOperand) {
-//	typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-//
-//	IntDiv intDiv;
-//	return UniWrapperFundamental<T>(intDiv.value(lOperand, rOperand.getValueConstRef()));
-//	//return UniWrapperFundamental<T>(lOperand % rOperand.getValueConstRef());
-//}
 
 template<typename T> UniWrapperFundamental<T> operator+(UniWrapperFundamental<T> lOperand, const T& rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() + rOperand);
@@ -440,27 +245,14 @@ template<typename T> UniWrapperFundamental<T> operator*(UniWrapperFundamental<T>
 template<typename T> UniWrapperFundamental<T> operator/(UniWrapperFundamental<T> lOperand, const T& rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() / rOperand);
 }
-//template<typename T> UniWrapperFundamental<T> operator%(UniWrapperFundamental<T> lOperand, const T& rOperand) {
-//	typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-//
-//	IntDiv intDiv;
-//	return UniWrapperFundamental<T>(intDiv.value(lOperand.getValueConstRef(), rOperand));
-//	//return UniWrapperFundamental<T>(lOperand.getValueConstRef() % rOperand);
-//}
 
 template<typename T> UniWrapperFundamental<T> operator++(UniWrapperFundamental<T> lOperand, int) {
-	//T val = lOperand.getValueConstRef();
-	//++lOperand;
-	//return UniWrapperFundamental<T>(val);
 	UniWrapperFundamental<T> tmp(lOperand);
 	lOperand.operator++();
 	return tmp;
 };
 
 template<typename T> UniWrapperFundamental<T> operator--(UniWrapperFundamental<T> lOperand, int) {
-	//T val = lOperand.getValueConstRef();
-	//--lOperand;
-	//return UniWrapperFundamental<T>(val);
 	UniWrapperFundamental<T> tmp(lOperand);
 	lOperand.operator--();
 	return tmp;
@@ -478,17 +270,11 @@ template<typename T> std::ostream& operator<<(UniWrapperFundamental<T>& obj, std
 }
 template<typename T> std::istream& operator>> (std::istream& is, UniWrapperFundamental<T>& obj)
 {
-	//// read obj from stream
-	//if ( /* T could not be constructed */)
-	//	is.setstate(std::ios::failbit);
 	is >> obj.getValueRef();
 	return is;
 }
 template<typename T> std::istream& operator>> (UniWrapperFundamental<T>& obj, std::istream& is)
 {
-	//// read obj from stream
-	//if ( /* T could not be constructed */)
-	//	is.setstate(std::ios::failbit);
 	is >> obj.getValueRef();
 	return is;
 }
@@ -499,8 +285,6 @@ template<typename T>
 class UniWrapperIntegral: public UniWrapperFundamental<T>
 {
 public:
-	//using UniWrapperFundamental<T>::UniWrapperFundamental;
-
 	UniWrapperIntegral(std::nullptr_t, std::nullptr_t, std::nullptr_t)
 	{
 	}
@@ -532,10 +316,6 @@ public:
 	}
 
 	UniWrapperIntegral<T>& UniWrapperIntegral::operator%=(UniWrapperIntegral<T> rOperand) {
-		//typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-
-		//IntDiv intDiv;
-		//intDiv.link(value, rOperand.value);
 		value %= rOperand.value;
 		_valueModified();
 		return *this;
@@ -543,26 +323,14 @@ public:
 };
 
 template<typename T> UniWrapperIntegral<T> operator%(UniWrapperIntegral<T> lOperand, UniWrapperIntegral<T> rOperand) {
-	//typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-
-	//IntDiv intDiv;
-	//return UniWrapperIntegral<T>(intDiv.value(lOperand.getValueConstRef(), rOperand.getValueConstRef()));
 	return UniWrapperIntegral<T>(lOperand.getValueRef() % rOperand.getValueRef());
 }
 
 template<typename T> UniWrapperIntegral<T> operator%(const T& lOperand, UniWrapperIntegral<T> rOperand) {
-	//typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-
-	//IntDiv intDiv;
-	//return UniWrapperIntegral<T>(intDiv.value(lOperand, rOperand.getValueConstRef()));
 	return UniWrapperIntegral<T>(lOperand % rOperand.getValueConstRef());
 }
 
 template<typename T> UniWrapperIntegral<T> operator%(UniWrapperIntegral<T> lOperand, const T& rOperand) {
-	//typedef std::conditional<std::is_integral<T>::value, IntDivAppropriate<T>, IntDivNotAppropriate<T> >::type IntDiv;
-
-	//IntDiv intDiv;
-	//return UniWrapperIntegral<T>(intDiv.value(lOperand.getValueConstRef(), rOperand));
 	return UniWrapperIntegral<T>(lOperand.getValueConstRef() % rOperand);
 }
 
@@ -572,8 +340,6 @@ template<typename T>
 class UniWrapperPointer : public UniWrapperFundamental<T>
 {
 public:
-	//using UniWrapperFundamental<T>::UniWrapperFundamental;
-
 	UniWrapperPointer(std::nullptr_t, std::nullptr_t, std::nullptr_t)
 	{
 	}
@@ -598,42 +364,11 @@ public:
 		this->value = value;
 		_valueConstructed();
 	}
-	//UniWrapperPointer(const std::ptrdiff_t value)
-	//	: UniWrapperFundamental(nullptr, nullptr, nullptr)
-	//{
-	//	value = static_cast<T>(value);
-	//	_valueConstructed();
-	//}
 
 	~UniWrapperPointer()
 	{
 		_valueDestructed();
 	}
-
-	//operator std::ptrdiff_t() const
-	//{
-	//	_classConvertedToValueType();
-	//	return static_cast<std::ptrdiff_t>(value);
-	//}
-
-	//using ItemRefType = typename std::add_lvalue_reference<typename std::remove_pointer<typename T>::type>::type;
-
-	//ItemRefType operator[](std::size_t idx)
-	//{
-	//	//typedef std::conditional<std::is_pointer<T>::value, ArrayAccessAppropriate<T>, ArrayAccessNotAppropriate<T> >::type ArrayAccess;
-	//	//ArrayAccess arrayAccess;
-	//	_refferenceToTheItemOfTheArrayValueReturned();
-	//	//return arrayAccess.item(value, idx);
-	//	return value[idx];
-	//}
-	//const ItemRefType operator[](std::size_t idx) const
-	//{
-	//	//typedef std::conditional<std::is_pointer<T>::value, ArrayAccessAppropriate<T>, ArrayAccessNotAppropriate<T> >::type ArrayAccess;
-	//	//ArrayAccess arrayAccess;
-	//	_refferenceToTheItemOfTheArrayValueReturned();
-	//	//return arrayAccess.item(value, idx);
-	//	return value[idx];
-	//}
 };
 
 template<typename T> UniWrapperPointer<T> operator+(const std::ptrdiff_t lOperand, UniWrapperPointer<T> rOperand) {
@@ -676,4 +411,3 @@ class UniWrapperUniversal : public UniWrapperChosePointerIntegralFundamental<T>
 public:
 	using UniWrapperChosePointerIntegralFundamental<T>::UniWrapperChosePointerIntegralFundamental;
 };
-
