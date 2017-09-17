@@ -3,11 +3,13 @@
 UniWrapperCallbacksNames::UniWrapperCallbacksNames()
 {
 	std::map<UniWrapperCallbacks, std::string> names = {
+		{ wrapperConstructed, "WrapperConstructed" },
 		{ valueConstructed, "Constructed" },
 		{ valueAssigned, "Assigned" },
 		{ valueModified, "Modified" },
 		{ valueWritten, "Written" },
 		{ valueDestructed, "Destructed" },
+		{ wrapperDestructed, "WrapperDestructed" },
 		{ classConvertedToValueType, "ClassConvertedToValueType" },
 		{ refferenceToValueReturned, "RefferenceToValueReturned" },
 		{ pointerToValueReturned, "PointerToValueReturned" },

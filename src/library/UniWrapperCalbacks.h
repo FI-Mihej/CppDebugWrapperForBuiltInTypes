@@ -6,12 +6,14 @@
 //==================================================================================
 
 enum UniWrapperCallbacks {
+	wrapperConstructed,
 	valueConstructed,
 	valueAssigned,
 	valueModified,
 	valueWritten,
 
 	valueDestructed,
+	wrapperDestructed,
 
 	classConvertedToValueType,
 
@@ -49,12 +51,14 @@ public:
 	virtual ~UniWrapperCalbacks() {};
 
 	// CALLBACKS
+	virtual void wrapperConstructed() {};
 	virtual void uniCallback(SetOfUniWrapperCallbacks setOfCallbacks, T value) {};
 	virtual void valueConstructed(T value) {};
 	virtual void valueAssigned(T value) {};
 	virtual void valueModified(T value) {};
 	virtual void valueWritten(T value) {}; // Any change
 	virtual void valueDestructed(T value) {};
+	virtual void wrapperDestructed() {};
 	virtual void classConvertedToValueType(T value) {}; // Read
 	virtual void refferenceToValueReturned(T value) {};
 	virtual void pointerToValueReturned(T value) {};
@@ -73,7 +77,9 @@ template<typename T>
 class UniWrapperCalbacksHolder
 {
 public:
-	UniWrapperCalbacksHolder() {};
+	UniWrapperCalbacksHolder() 
+		:callbacks(nullptr)
+	{};
 	~UniWrapperCalbacksHolder() {};
 
 	UniWrapperCalbacks<T>& getCallbacks()
@@ -87,8 +93,39 @@ public:
 	{
 		this->callbacks = &callbacks;
 	}
+	void clearCallbacks()
+	{
+		this->callbacks = nullptr;
+	}
 
 protected:
 	UniWrapperCalbacks<T> defaultCallbacks;
 	UniWrapperCalbacks<T>* callbacks = nullptr;
+};
+
+//==================================================================================
+
+template<typename T>
+class CallbacksChanger
+{
+public:
+	CallbacksChanger(UniWrapperCalbacks<T>* newCallbacks, bool needToDeleteOnDestroy = false)
+		:needToDeleteOnDestroy(needToDeleteOnDestroy)
+	{
+		oldCallbacks = &(Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks());
+		Singleton<UniWrapperCalbacksHolder<T> >().setCallbacks(*newCallbacks);
+	}
+
+	~CallbacksChanger()
+	{
+		UniWrapperCalbacks<T>* newCallbacks = &(Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks());
+		Singleton<UniWrapperCalbacksHolder<T> >().clearCallbacks();
+		Singleton<UniWrapperCalbacksHolder<T> >().setCallbacks(*oldCallbacks);
+		if (needToDeleteOnDestroy)
+			delete newCallbacks;
+	}
+
+protected:
+	UniWrapperCalbacks<T>* oldCallbacks;
+	bool needToDeleteOnDestroy = false;
 };
