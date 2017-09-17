@@ -460,14 +460,6 @@ int main()
 	}
 
 	{
-		using OriginalType = int*;
-		CallbacksChanger<OriginalType> callbacksChanger(new MyUniWrapperCalbacks<OriginalType>(), true);
-
-		int i = 42;
-		universalTest<UniWrapperPointer<OriginalType>, OriginalType>(&i, "");
-	}
-
-	{
 		using OriginalType = float;
 		MyUniWrapperCalbacks<OriginalType> myCallbacks;
 		CallbacksChanger<OriginalType> callbacksChanger(&myCallbacks);
@@ -481,6 +473,14 @@ int main()
 		CallbacksChanger<OriginalType> callbacksChanger(&myCallbacks);
 
 		universalTest<UniWrapperFundamental<OriginalType>, OriginalType>(42.0, "");
+	}
+
+	{
+		using OriginalType = int*;
+		CallbacksChanger<OriginalType> callbacksChanger(new MyUniWrapperCalbacks<OriginalType>(), true);
+
+		int i = 42;
+		universalTest<UniWrapperPointer<OriginalType>, OriginalType>(&i, "");
 	}
 
 	{
