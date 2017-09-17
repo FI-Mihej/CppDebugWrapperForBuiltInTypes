@@ -49,7 +49,7 @@ public:
 	// CALLBACKS
 	void wrapperConstructed() override
 	{
-		std::cout << "\t\t>> Wrapper Constructed;" << std::endl;
+		std::cout << "\t>> Wrapper Constructed;" << std::endl;
 	}
 
 	void uniCallback(SetOfUniWrapperCallbacks setOfCallbacks, T value) override
@@ -59,7 +59,7 @@ public:
 			|| ((setOfCallbacks.end() != setOfCallbacks.find(UniWrapperCallbacks::valueDestructed)) 
 				&& (setOfCallbacks.size() > 1)))
 		{
-			std::cout << "\t>> ";
+			std::cout << "\t\t>> ";
 			for (auto callbackId : setOfCallbacks) {
 				if (UniWrapperCallbacks::valueDestructed != callbackId)
 				{
@@ -79,7 +79,7 @@ public:
 
 	void valueDestructed(T value) override
 	{
-		std::cout << "\t\t>> Destructed" << " [ " << value << " ];" << std::endl;
+		std::cout << "\t>> Destructed" << " [ " << value << " ];" << std::endl;
 	}
 
 	void wrapperDestructed() override
@@ -460,14 +460,6 @@ int main()
 	}
 
 	{
-		using OriginalType = int*;
-		CallbacksChanger<OriginalType> callbacksChanger(new MyUniWrapperCalbacks<OriginalType>(), true);
-
-		int i = 42;
-		universalTest<UniWrapperPointer<OriginalType>, OriginalType>(&i, "");
-	}
-
-	{
 		using OriginalType = float;
 		MyUniWrapperCalbacks<OriginalType> myCallbacks;
 		CallbacksChanger<OriginalType> callbacksChanger(&myCallbacks);
@@ -481,6 +473,14 @@ int main()
 		CallbacksChanger<OriginalType> callbacksChanger(&myCallbacks);
 
 		universalTest<UniWrapperFundamental<OriginalType>, OriginalType>(42.0, "");
+	}
+
+	{
+		using OriginalType = int*;
+		CallbacksChanger<OriginalType> callbacksChanger(new MyUniWrapperCalbacks<OriginalType>(), true);
+
+		int i = 42;
+		universalTest<UniWrapperPointer<OriginalType>, OriginalType>(&i, "");
 	}
 
 	{
