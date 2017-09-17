@@ -49,7 +49,7 @@ public:
 	// CALLBACKS
 	void wrapperConstructed() override
 	{
-		std::cout << "\t\t>> Wrapper Constructed;" << std::endl;
+		std::cout << "\t>> Wrapper Constructed;" << std::endl;
 	}
 
 	void uniCallback(SetOfUniWrapperCallbacks setOfCallbacks, T value) override
@@ -59,7 +59,7 @@ public:
 			|| ((setOfCallbacks.end() != setOfCallbacks.find(UniWrapperCallbacks::valueDestructed)) 
 				&& (setOfCallbacks.size() > 1)))
 		{
-			std::cout << "\t>> ";
+			std::cout << "\t\t>> ";
 			for (auto callbackId : setOfCallbacks) {
 				if (UniWrapperCallbacks::valueDestructed != callbackId)
 				{
@@ -79,7 +79,7 @@ public:
 
 	void valueDestructed(T value) override
 	{
-		std::cout << "\t\t>> Destructed" << " [ " << value << " ];" << std::endl;
+		std::cout << "\t>> Destructed" << " [ " << value << " ];" << std::endl;
 	}
 
 	void wrapperDestructed() override
