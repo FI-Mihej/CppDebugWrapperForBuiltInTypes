@@ -5,7 +5,7 @@
 
 #include "UniWrapperForBuiltInTypes.hpp"
 
-template<typename T, typename PringStringValue = void>
+template<typename T>
 class MyUniWrapperCalbacks: public UniWrapperCalbacks<T>
 {
 public:

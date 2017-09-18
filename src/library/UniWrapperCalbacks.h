@@ -6,6 +6,10 @@
 //==================================================================================
 
 enum UniWrapperCallbacks {
+	// Wrapper related
+	wrapperConstructed,  // Wrapper object constructed
+	wrapperDestructed,  // Wrapper object destructed
+
 	// Write
 	valueConstructed,  // Default and Copy constructors
 	valueAssigned,  // operator=()
@@ -55,8 +59,8 @@ public:
 	// CALLBACKS
 
 	// Wrapper related callbacks
-	virtual void wrapperConstructed() {};
-	virtual void wrapperDestructed() {};
+	virtual void wrapperConstructed() {};  // Wrapper object constructed
+	virtual void wrapperDestructed() {};  // Wrapper object destructed
 
 	// Value related callbacks:
 
