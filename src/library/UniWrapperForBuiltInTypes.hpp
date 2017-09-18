@@ -43,38 +43,56 @@ protected:
 	}
 
 	// Value write
-	void _valueConstructed() const
+	void _valueConstructed() const  // Default and Copy constructors
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueConstructed(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWritten(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueConstructed,  UniWrapperCallbacks::valueWritten }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({
+			UniWrapperCallbacks::valueConstructed, UniWrapperCallbacks::valueWritten
+		}, value);
 	}
 
 	void _valueAssigned() const  // operator=()
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueAssigned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWritten(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueAssigned,  UniWrapperCallbacks::valueWritten }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().pointerToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({
+			UniWrapperCallbacks::valueAssigned,  
+			UniWrapperCallbacks::valueWritten,
+			UniWrapperCallbacks::pointerToValueReturned,
+			UniWrapperCallbacks::linkToValueReturned
+		}, value);
 	}
 
 	void _valueModified() const  // ++, +=, -=, etc.
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueModified(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWritten(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueModified,  UniWrapperCallbacks::valueWritten }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().refferenceToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({
+			UniWrapperCallbacks::valueModified,  
+			UniWrapperCallbacks::valueWritten,
+			UniWrapperCallbacks::refferenceToValueReturned,
+			UniWrapperCallbacks::linkToValueReturned
+		}, value);
 	}
 
 	void _valueWritten() const // Any change
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWritten(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueWritten }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ 
+			UniWrapperCallbacks::valueWritten }, value);
 	}
 
 	// Value will be destructed
 	void _valueDestructed() const
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueDestructed(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueDestructed }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ 
+			UniWrapperCallbacks::valueDestructed }, value);
 	}
 
 	// Read copy or refference
@@ -82,34 +100,43 @@ protected:
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().refferenceToValueReturned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::refferenceToValueReturned,  UniWrapperCallbacks::linkToValueReturned }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ 
+			UniWrapperCallbacks::refferenceToValueReturned,  UniWrapperCallbacks::linkToValueReturned }, value);
 	}
 
 	void _constRefferenceToValueReturned() const  // Const refference returned
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().constRefferenceToValueReturned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWasRead(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::constRefferenceToValueReturned,  UniWrapperCallbacks::valueWasRead }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({
+			UniWrapperCallbacks::constRefferenceToValueReturned,  
+			UniWrapperCallbacks::valueWasRead,
+			UniWrapperCallbacks::linkToValueReturned
+		}, value);
 	}
 
 	void _pointerToValueReturned() const // Pointer to value returned
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().pointerToValueReturned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::pointerToValueReturned,  UniWrapperCallbacks::linkToValueReturned }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ 
+			UniWrapperCallbacks::pointerToValueReturned,  UniWrapperCallbacks::linkToValueReturned }, value);
 	}
 
 	void _linkToValueReturned() const // Any type of links (Refference, Const Refference, Pointer) was returned from the class
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::linkToValueReturned }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ 
+			UniWrapperCallbacks::linkToValueReturned }, value);
 	}
 
 	void _classConvertedToValueType() const // Copy of value was returned
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().classConvertedToValueType(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWasRead(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::classConvertedToValueType, UniWrapperCallbacks::valueWasRead }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ 
+			UniWrapperCallbacks::classConvertedToValueType, UniWrapperCallbacks::valueWasRead }, value);
 	}
 
 	void _valueWasRead() const  // Any type of read (Copy or Link to the value)
@@ -122,7 +149,11 @@ protected:
 	void _refferenceToTheItemOfTheArrayValueReturned() const  // operator[]. Value is an array. Refference to the value[index] was returned.
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().refferenceToTheItemOfTheArrayValueReturned(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::refferenceToTheItemOfTheArrayValueReturned }, value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({
+			UniWrapperCallbacks::refferenceToTheItemOfTheArrayValueReturned,
+			UniWrapperCallbacks::linkToValueReturned
+		}, value);
 	}
 
 public:

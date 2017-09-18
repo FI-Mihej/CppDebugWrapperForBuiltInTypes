@@ -6,25 +6,27 @@
 //==================================================================================
 
 enum UniWrapperCallbacks {
-	wrapperConstructed,
-	wrapperDestructed,
+	// Write
+	valueConstructed,  // Default and Copy constructors
+	valueAssigned,  // operator=()
+	valueModified,  // ++, +=, -=, etc.
+	valueWritten,  // Any change
 
-	valueConstructed,
-	valueAssigned,
-	valueModified,
-	valueWritten,
-
+	// Value will be destructed
 	valueDestructed,
 
+	// Refference returned
 	refferenceToValueReturned,
 	pointerToValueReturned,
-	linkToValueReturned,
+	linkToValueReturned,  // Any type of reference returned (Ref, Const Ref, Ptr)
 
-	classConvertedToValueType,
-	constRefferenceToValueReturned,
-	valueWasRead,
+	// Read
+	constRefferenceToValueReturned,  // Const Ref was returned
+	classConvertedToValueType, // Copy was returned
+	valueWasRead, // Any type of read (Copy, Const Ref)
 
-	refferenceToTheItemOfTheArrayValueReturned
+	// Item from array value
+	refferenceToTheItemOfTheArrayValueReturned  // operator[]. Value is an array. Refference to the value[index] was returned.
 };
 
 typedef std::set<UniWrapperCallbacks> SetOfUniWrapperCallbacks;
@@ -51,20 +53,36 @@ public:
 	virtual ~UniWrapperCalbacks() {};
 
 	// CALLBACKS
+
+	// Wrapper related callbacks
 	virtual void wrapperConstructed() {};
-	virtual void uniCallback(SetOfUniWrapperCallbacks setOfCallbacks, T value) {};
-	virtual void valueConstructed(T value) {};
-	virtual void valueAssigned(T value) {};
-	virtual void valueModified(T value) {};
-	virtual void valueWritten(T value) {}; // Any change
-	virtual void valueDestructed(T value) {};
 	virtual void wrapperDestructed() {};
-	virtual void classConvertedToValueType(T value) {}; // Any read
-	virtual void refferenceToValueReturned(T value) {};
-	virtual void pointerToValueReturned(T value) {};
-	virtual void linkToValueReturned(T value) {}; // Any type of links was returned from the class
-	virtual void constRefferenceToValueReturned(T value) {};
-	virtual void valueWasRead(T value) {};
+
+	// Value related callbacks:
+
+	// Universal callback for value related callbacks
+	virtual void uniCallback(SetOfUniWrapperCallbacks setOfCallbacks, T value) {};
+
+	// Write
+	virtual void valueConstructed(T value) {};  // Default and Copy constructors
+	virtual void valueAssigned(T value) {};  // operator=()
+	virtual void valueModified(T value) {};  // ++, +=, -=, etc.
+	virtual void valueWritten(T value) {};  // Any change
+
+	// Value will be destructed
+	virtual void valueDestructed(T value) {};
+
+	// Refference returned
+	virtual void refferenceToValueReturned(T value) {};  // Refference returned
+	virtual void pointerToValueReturned(T value) {};  // Pointer to value returned
+	virtual void linkToValueReturned(T value) {};  // Any type of reference returned (Ref, Const Ref, Ptr)	
+
+	// Read
+	virtual void constRefferenceToValueReturned(T value) {};  // Const Ref was returned
+	virtual void classConvertedToValueType(T value) {};  // Copy of the value was returned
+	virtual void valueWasRead(T value) {};  // Any type of read (Copy, Const Ref)
+
+	// Item from array value
 	virtual void refferenceToTheItemOfTheArrayValueReturned(T value) {};  // Value is an array. Refference to the value[index] was returned.
 
 protected:
