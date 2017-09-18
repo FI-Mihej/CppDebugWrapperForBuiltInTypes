@@ -209,7 +209,7 @@ You can do it by your hands. Or with CallbacksChanger class:
 {
     MyUniWrapperCalbacks<T> myCallbacks;
     Singleton<UniWrapperCalbacksHolder<T> >().setCallbacks(myCallbacks);
-    CallbacksChanger<OriginalType> callbacksChanger(&myCallbacks);
+    CallbacksChanger<T> callbacksChanger(&myCallbacks);
 
    ...
 
