@@ -1,5 +1,5 @@
-// UniWrapperForBuiltInTypes.cpp : Defines the entry point for the console application.
-//
+#pragma once
+
 #include <type_traits>
 #include <iostream>
 #include <exception>
@@ -22,86 +22,104 @@ template<typename T>
 class UniWrapperFundamental
 {
 protected:
+	// Wrapper related callbacks
+
+	void _wrapperConstructed() const  // Wrapper constructed
+	{
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().wrapperConstructed();
+	}
+
+	void _wrapperDestructed() const  // Wrapper almost destructed
+	{
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().wrapperDestructed();
+	}
+
+	// Value related callbacks:
+
+	// Universal callback for value related callbacks
 	void _uniCallback(SetOfUniWrapperCallbacks setOfCallbacks) const
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback(setOfCallbacks, value);
 	}
 
-	void _wrapperConstructed() const
-	{
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().wrapperConstructed();
-	}
+	// Value write
 	void _valueConstructed() const
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueConstructed(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWritten(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueConstructed,  UniWrapperCallbacks::valueWritten }, value);
 	}
-	void _valueAssigned() const
+
+	void _valueAssigned() const  // operator=()
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueAssigned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWritten(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueAssigned,  UniWrapperCallbacks::valueWritten }, value);
 	}
-	void _valueModified() const
+
+	void _valueModified() const  // ++, +=, -=, etc.
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueModified(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWritten(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueModified,  UniWrapperCallbacks::valueWritten }, value);
 	}
+
 	void _valueWritten() const // Any change
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWritten(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueWritten }, value);
 	}
 
+	// Value will be destructed
 	void _valueDestructed() const
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueDestructed(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueDestructed }, value);
 	}
-	void _wrapperDestructed() const
-	{
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().wrapperDestructed();
-	}
 
-	void _classConvertedToValueType() const // Read
-	{
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().classConvertedToValueType(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::classConvertedToValueType }, value);
-	}
-
-	void _refferenceToValueReturned() const
+	// Read copy or refference
+	void _refferenceToValueReturned() const  // Refference returned
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().refferenceToValueReturned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::refferenceToValueReturned,  UniWrapperCallbacks::linkToValueReturned }, value);
 	}
-	void _pointerToValueReturned() const
-	{
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().pointerToValueReturned(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::pointerToValueReturned,  UniWrapperCallbacks::linkToValueReturned }, value);
-	}
-	void _linkToValueReturned() const // Any type of links was returned from the class
-	{
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
-		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::linkToValueReturned }, value);
-	}
 
-	void _constRefferenceToValueReturned() const
+	void _constRefferenceToValueReturned() const  // Const refference returned
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().constRefferenceToValueReturned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWasRead(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::constRefferenceToValueReturned,  UniWrapperCallbacks::valueWasRead }, value);
 	}
-	void _valueReaden() const
+
+	void _pointerToValueReturned() const // Pointer to value returned
+	{
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().pointerToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::pointerToValueReturned,  UniWrapperCallbacks::linkToValueReturned }, value);
+	}
+
+	void _linkToValueReturned() const // Any type of links (Refference, Const Refference, Pointer) was returned from the class
+	{
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().linkToValueReturned(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::linkToValueReturned }, value);
+	}
+
+	void _classConvertedToValueType() const // Copy of value was returned
+	{
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().classConvertedToValueType(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWasRead(value);
+		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::classConvertedToValueType, UniWrapperCallbacks::valueWasRead }, value);
+	}
+
+	void _valueWasRead() const  // Any type of read (Copy or Link to the value)
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().valueWasRead(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::valueWasRead }, value);
 	}
 
-	void _refferenceToTheItemOfTheArrayValueReturned() const  // Value is an array. Refference to the value[index] was returned.
+	// Item from array value
+	void _refferenceToTheItemOfTheArrayValueReturned() const  // operator[]. Value is an array. Refference to the value[index] was returned.
 	{
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().refferenceToTheItemOfTheArrayValueReturned(value);
 		Singleton<UniWrapperCalbacksHolder<T> >().getCallbacks().uniCallback({ UniWrapperCallbacks::refferenceToTheItemOfTheArrayValueReturned }, value);
@@ -111,10 +129,12 @@ public:
 	UniWrapperFundamental(std::nullptr_t, std::nullptr_t, std::nullptr_t)
 	{
 	}
+
 	UniWrapperFundamental()
 	{
 		_wrapperConstructed();
 	}
+
 	UniWrapperFundamental(const UniWrapperFundamental<T>& other)
 	{
 		_wrapperConstructed();
@@ -123,6 +143,7 @@ public:
 		}
 		_valueConstructed();
 	}
+
 	template< typename T >
 	using constType = typename std::add_const<T>::type;
 	UniWrapperFundamental(constType<T> value)
@@ -131,6 +152,7 @@ public:
 		_wrapperConstructed();
 		_valueConstructed();
 	}
+
 	UniWrapperFundamental(UniWrapperFundamental<T>&& other)
 		: UniWrapperFundamental()
 	{
@@ -145,43 +167,16 @@ public:
 		_wrapperDestructed();
 	}
 
-	friend void swap(UniWrapperFundamental<T>& first, UniWrapperFundamental<T>& second) // nothrow
+	friend void swap(UniWrapperFundamental<T>& first, UniWrapperFundamental<T>& second)
 	{
-		//using std::swap;
-
-		//swap(first.value, second.value);
 		first.value = second.value;
 	}
 
-	friend void swap(UniWrapperFundamental<T>& first, T second) // nothrow
+	friend void swap(UniWrapperFundamental<T>& first, T second)
 	{
 		first.value = second;
 	}
 
-	//UniWrapperFundamental<T>& operator=(const UniWrapperFundamental<T>& other)
-	//{
-	//	if (this != std::addressof(other)) {
-	//		value = other.value;
-	//	}
-	//	_valueAssigned();
-	//	return *this;
-	//}
-	//UniWrapperFundamental<T>& operator=(UniWrapperFundamental<T>&& other)
-	//{
-	//	if (this != std::addressof(other)) {
-	//		value = other.value;
-	//	}
-	//	_valueAssigned();
-	//	return *this;
-	//}
-	//UniWrapperFundamental<T>& UniWrapperFundamental<T>::operator=(UniWrapperFundamental<T> other) noexcept
-	//{
-	//	if (this != std::addressof(other)) {
-	//		value = other.value;
-	//	}
-	//	_valueAssigned();
-	//	return *this;
-	//}
 	UniWrapperFundamental<T>& operator=(UniWrapperFundamental<T> other) noexcept
 	{
 		if (this != std::addressof(other)) {
@@ -190,25 +185,7 @@ public:
 		_valueAssigned();
 		return *this;
 	}
-	//UniWrapperFundamental<T>& operator=(const T& other)
-	//{
-	//	value = other;
-	//	_valueAssigned();
-	//	return *this;
-	//}
-	//UniWrapperFundamental<T>& operator=(T&& other)
-	//{
-	//	value = other;
-	//	_valueAssigned();
-	//	return *this;
-	//}
-	//UniWrapperFundamental<T>& UniWrapperFundamental<T>::operator=(T other) noexcept
-	//{
-	//	swap(*this, other);
-	//	//this->value = other;
-	//	_valueAssigned();
-	//	return *this;
-	//}
+
 	UniWrapperFundamental<T>& operator=(T other) noexcept
 	{
 		swap(*this, other);
@@ -249,16 +226,19 @@ public:
 		_valueModified();
 		return *this;
 	}
+
 	UniWrapperFundamental<T>& UniWrapperFundamental::operator-=(UniWrapperFundamental<T> rOperand) {
 		value -= rOperand.value;
 		_valueModified();
 		return *this;
 	}
+
 	UniWrapperFundamental<T>& UniWrapperFundamental::operator*=(UniWrapperFundamental<T> rOperand) {
 		value *= rOperand.value;
 		_valueModified();
 		return *this;
 	}
+
 	UniWrapperFundamental<T>& UniWrapperFundamental::operator/=(UniWrapperFundamental<T> rOperand) {
 		value /= rOperand.value;
 		_valueModified();
@@ -270,6 +250,7 @@ public:
 		_valueModified();
 		return *this;
 	};
+
 	UniWrapperFundamental<T>& UniWrapperFundamental::operator--() {
 		--value;
 		_valueModified();
@@ -281,6 +262,7 @@ public:
 		this->operator++();
 		return tmp;
 	};
+
 	UniWrapperFundamental<T>& operator--(int) {
 		UniWrapperFundamental<T> tmp(*this);
 		this->operator--();
@@ -294,13 +276,16 @@ protected:
 template<typename T> UniWrapperFundamental<T> operator+(UniWrapperFundamental<T> lOperand, UniWrapperFundamental<T> rOperand)
 {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() + rOperand.getValueConstRef());
-};
+}
+
 template<typename T> UniWrapperFundamental<T> operator-(UniWrapperFundamental<T> lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() - rOperand.getValueConstRef());
 }
+
 template<typename T> UniWrapperFundamental<T> operator*(UniWrapperFundamental<T> lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() * rOperand.getValueConstRef());
 }
+
 template<typename T> UniWrapperFundamental<T> operator/(UniWrapperFundamental<T> lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() / rOperand.getValueConstRef());
 }
@@ -308,12 +293,15 @@ template<typename T> UniWrapperFundamental<T> operator/(UniWrapperFundamental<T>
 template<typename T> UniWrapperFundamental<T> operator+(const T& lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand + rOperand.getValueConstRef());
 }
+
 template<typename T> UniWrapperFundamental<T> operator-(const T& lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand - rOperand.getValueConstRef());
 }
+
 template<typename T> UniWrapperFundamental<T> operator*(const T& lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand * rOperand.getValueConstRef());
 }
+
 template<typename T> UniWrapperFundamental<T> operator/(const T& lOperand, UniWrapperFundamental<T> rOperand) {
 	return UniWrapperFundamental<T>(lOperand / rOperand.getValueConstRef());
 }
@@ -321,12 +309,15 @@ template<typename T> UniWrapperFundamental<T> operator/(const T& lOperand, UniWr
 template<typename T> UniWrapperFundamental<T> operator+(UniWrapperFundamental<T> lOperand, const T& rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() + rOperand);
 }
+
 template<typename T> UniWrapperFundamental<T> operator-(UniWrapperFundamental<T> lOperand, const T& rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() - rOperand);
 }
+
 template<typename T> UniWrapperFundamental<T> operator*(UniWrapperFundamental<T> lOperand, const T& rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() * rOperand);
 }
+
 template<typename T> UniWrapperFundamental<T> operator/(UniWrapperFundamental<T> lOperand, const T& rOperand) {
 	return UniWrapperFundamental<T>(lOperand.getValueConstRef() / rOperand);
 }
@@ -335,7 +326,7 @@ template<typename T> UniWrapperFundamental<T> operator++(UniWrapperFundamental<T
 	UniWrapperFundamental<T> tmp(lOperand);
 	lOperand.operator++();
 	return tmp;
-};
+}
 
 template<typename T> UniWrapperFundamental<T> operator--(UniWrapperFundamental<T> lOperand, int) {
 	UniWrapperFundamental<T> tmp(lOperand);
@@ -348,16 +339,19 @@ template<typename T> std::ostream& operator<<(std::ostream& os, UniWrapperFundam
 	os << obj.getValueConstRef();
 	return os;
 }
+
 template<typename T> std::ostream& operator<<(UniWrapperFundamental<T>& obj, std::ostream& os)
 {
 	os << obj.getValueConstRef();
 	return os;
 }
+
 template<typename T> std::istream& operator>> (std::istream& is, UniWrapperFundamental<T>& obj)
 {
 	is >> obj.getValueRef();
 	return is;
 }
+
 template<typename T> std::istream& operator>> (UniWrapperFundamental<T>& obj, std::istream& is)
 {
 	is >> obj.getValueRef();
@@ -373,11 +367,13 @@ public:
 	UniWrapperIntegral(std::nullptr_t, std::nullptr_t, std::nullptr_t)
 	{
 	}
+
 	UniWrapperIntegral()
 		: UniWrapperFundamental<T>(nullptr, nullptr, nullptr)
 	{
 		_wrapperConstructed();
 	}
+
 	UniWrapperIntegral(const UniWrapperIntegral<T>& other)
 		: UniWrapperFundamental<T>(nullptr, nullptr, nullptr)
 	{
@@ -387,14 +383,7 @@ public:
 		}
 		_valueConstructed();
 	}
-	//UniWrapperIntegral(const UniWrapperFundamental<T>& other)
-	//	: UniWrapperFundamental<T>(nullptr, nullptr, nullptr)
-	//{
-	//	if (this != std::addressof(other)) {
-	//		value = other.value;
-	//	}
-	//	_valueConstructed();
-	//}
+
 	template< typename T >
 	using constType = typename std::add_const<T>::type;
 	UniWrapperIntegral(constType<T> value)
@@ -404,6 +393,7 @@ public:
 		this->value = value;
 		_valueConstructed();
 	}
+
 	UniWrapperIntegral(UniWrapperIntegral<T>&& other)
 		: UniWrapperIntegral()
 	{
@@ -426,6 +416,7 @@ public:
 		_valueAssigned();
 		return *this;
 	}
+
 	UniWrapperIntegral<T>& operator=(T other) noexcept
 	{
 		swap(*this, other);
@@ -461,11 +452,13 @@ public:
 	UniWrapperPointer(std::nullptr_t, std::nullptr_t, std::nullptr_t)
 	{
 	}
+
 	UniWrapperPointer()
 		: UniWrapperFundamental<T>(nullptr, nullptr, nullptr)
 	{
 		_wrapperConstructed();
 	}
+
 	UniWrapperPointer(const UniWrapperPointer<T>& other)
 		: UniWrapperFundamental<T>(nullptr, nullptr, nullptr)
 	{
@@ -475,14 +468,7 @@ public:
 		}
 		_valueConstructed();
 	}
-	//UniWrapperPointer(const UniWrapperFundamental<T>& other)
-	//	: UniWrapperFundamental<T>(nullptr, nullptr, nullptr)
-	//{
-	//	if (this != std::addressof(other)) {
-	//		value = other.value;
-	//	}
-	//	_valueConstructed();
-	//}
+
 	template< typename T >
 	using constType = typename std::add_const<T>::type;
 	UniWrapperPointer(constType<T> value)
@@ -492,6 +478,7 @@ public:
 		this->value = value;
 		_valueConstructed();
 	}
+
 	UniWrapperPointer(UniWrapperPointer<T>&& other)
 		: UniWrapperPointer()
 	{
@@ -514,6 +501,7 @@ public:
 		_valueAssigned();
 		return *this;
 	}
+
 	UniWrapperPointer<T>& operator=(T other) noexcept
 	{
 		swap(*this, other);
@@ -526,6 +514,7 @@ public:
 		_valueModified();
 		return *this;
 	}
+
 	UniWrapperPointer<T>& operator-=(const std::ptrdiff_t rOperand) {
 		value -= rOperand;
 		_valueModified();
@@ -536,12 +525,15 @@ public:
 template<typename T> UniWrapperPointer<T> operator+(const std::ptrdiff_t lOperand, UniWrapperPointer<T> rOperand) {
 	return UniWrapperPointer<T>(lOperand + rOperand.getValueConstRef());
 }
+
 template<typename T> UniWrapperPointer<T> operator-(const std::ptrdiff_t lOperand, UniWrapperPointer<T> rOperand) {
 	return UniWrapperPointer<T>(lOperand - rOperand.getValueConstRef());
 }
+
 template<typename T> UniWrapperPointer<T> operator*(const std::ptrdiff_t lOperand, UniWrapperPointer<T> rOperand) {
 	return UniWrapperPointer<T>(lOperand * rOperand.getValueConstRef());
 }
+
 template<typename T> UniWrapperPointer<T> operator/(const std::ptrdiff_t lOperand, UniWrapperPointer<T> rOperand) {
 	return UniWrapperPointer<T>(lOperand / rOperand.getValueConstRef());
 }
@@ -549,12 +541,15 @@ template<typename T> UniWrapperPointer<T> operator/(const std::ptrdiff_t lOperan
 template<typename T> UniWrapperPointer<T> operator+(UniWrapperPointer<T> lOperand, const std::ptrdiff_t rOperand) {
 	return UniWrapperPointer<T>(lOperand.getValueConstRef() + rOperand);
 }
+
 template<typename T> UniWrapperPointer<T> operator-(UniWrapperPointer<T> lOperand, const std::ptrdiff_t rOperand) {
 	return UniWrapperPointer<T>(lOperand.getValueConstRef() - rOperand);
 }
+
 template<typename T> UniWrapperPointer<T> operator*(UniWrapperPointer<T> lOperand, const std::ptrdiff_t rOperand) {
 	return UniWrapperPointer<T>(lOperand.getValueConstRef() * rOperand);
 }
+
 template<typename T> UniWrapperPointer<T> operator/(UniWrapperPointer<T> lOperand, const std::ptrdiff_t rOperand) {
 	return UniWrapperPointer<T>(lOperand.getValueConstRef() / rOperand);
 }

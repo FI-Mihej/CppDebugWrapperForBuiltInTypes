@@ -1,6 +1,3 @@
-// Test.cpp : Defines the entry point for the console application.
-//
-
 #include <string>
 #include <cassert>
 #include <conio.h>
@@ -17,6 +14,7 @@ public:
 	{
 
 	}
+
 	~MyUniWrapperCalbacks() override
 	{
 
@@ -33,18 +31,6 @@ public:
 	{
 		std::cout << value;
 	}
-
-	//template<typename T, typename std::enable_if_t<std::is_void<PringStringValue>::value, int> = 0>
-	//void printValue(T value)
-	//{
-	//	safePrintValue(value);
-	//}
-
-	//template<typename T, typename = std::enable_if_t<!std::is_void<PringStringValue>::value> >
-	//void printValue(T value)
-	//{
-	//	std::cout << value;
-	//}
 
 	// CALLBACKS
 	void wrapperConstructed() override
@@ -68,7 +54,6 @@ public:
 						std::cout << value;
 					else
 						safePrintValue(value);
-					//safePrintValue(value);
 					safePrintValue(value);
 					std::cout<< " ]; ";
 				}
@@ -414,18 +399,11 @@ TestType universalTestComputerWithConst(OriginalType initial, int originalConstV
 	std::cout << ">> ====================================" << std::endl;
 
 	return i;
-
-//return TestType(initial);
 }
 
 template<typename TestType, typename OriginalType>
 void universalTest(OriginalType initial, std::string comment)
 {
-	//using TestType = typename UniWrapperUniversal<OriginalType>;
-	//using TestType = typename UniWrapperIntegral<OriginalType>;
-	//using TestType = typename UniWrapperPointer<OriginalType>;
-	//using TestType = typename UniWrapperFundamental<OriginalType>;
-
 	std::string testTypeName = typeid(TestType).name();
 	std::string testTitle = "<< Test - [" + testTypeName + "] - " + comment + " >>";
 	std::transform(testTitle.begin(), testTitle.end(), testTitle.begin(), ::toupper);
@@ -504,128 +482,6 @@ int main()
 		wcsncpy(readWriteString, readOnlyString, sizeof(readOnlyString));
 		universalTest<UniWrapperPointer<OriginalType>, OriginalType>(readWriteString, "");
 	}
-
-
-
-
-	//{
-	//	std::cout << std::endl << std::endl << std::endl << "TEST - SIZE_T - without singleton default callbacks change" << std::endl << std::endl;
-
-	//	UniWrapperIntegral<rsize_t> i = 4;
-	//	++i;
-	//	i++;
-	//	--i;
-	//	i--;
-	//	int k = 4 - i;
-	//	int kk = i - 4;
-	//	size_t* kkk = &i;
-	//	k = 4 % i;
-	//}
-
-	//{
-	//	std::cout << std::endl << std::endl << std::endl << "TEST - INT" << std::endl << std::endl;
-
-	//	MyUniWrapperCalbacks<int> myCallbacks;
-	//	Singleton<UniWrapperCalbacksHolder<int> >().setCallbacks(myCallbacks);
-
-	//	UniWrapperIntegral<int> i = 4;
-	//	++i;
-	//	i++;
-	//	--i;
-	//	i--;
-	//	int k = 4 - i;
-	//	int kk = i - 4;
-	//	int* kkk = &i;
-	//	k = 4 % i;
-	//}
-
-	//{
-	//	std::cout << std::endl << std::endl << std::endl << "TEST - INT*" << std::endl << std::endl;
-
-	//	MyUniWrapperCalbacks<int*> myCallbacks;
-	//	Singleton<UniWrapperCalbacksHolder<int*> >().setCallbacks(myCallbacks);
-
-	//	int a = 10;
-	//	UniWrapperPointer<int*> i = &a;
-	//	++i;
-	//	i++;
-	//	--i;
-	//	i--;
-	//	int *k = 4 + i;
-	//	i = UniWrapperPointer<int*>(k);
-	//	int *kk = i - 4;
-	//	int** kkk = &i;
-	//	//i = i + kk;  // '+': cannot add two pointers
-	//	//int p = 4 % i;  // Unsupported by C/C++ design so not implemented in the Wrapper
-	//	//int p = k % kk;  // Unsupported by C/C++ design so not implemented in the Wrapper
-	//	int p = *i;
-	//	int *pp = i;
-	//	//kk = kk + pp;  // '+': cannot add two pointers
-	//	std::cout << p << "; " << *pp << std::endl;
-	//}
-
-	//{
-	//	std::cout << std::endl << std::endl << std::endl << "TEST - FLOAT" << std::endl << std::endl;
-
-	//	MyUniWrapperCalbacks<float> myCallbacks;
-	//	Singleton<UniWrapperCalbacksHolder<float> >().setCallbacks(myCallbacks);
-
-	//	UniWrapperFundamental<float> i = 4.0;
-	//	++i;
-	//	i++;
-	//	--i;
-	//	i--;
-	//	float k = 4.0 + i;
-	//	float kk = i + 4.0;
-	//	float* kkk = &i;
-	//	//k = i % UniWrapperFundamental<float>(16);  // Unsupported by C/C++ design so not implemented in the Wrapper
-	//}
-
-	//{
-	//	std::cout << std::endl << std::endl << std::endl << "TEST - DOUBLE - without callbacks" << std::endl << std::endl;
-
-	//	UniWrapperCalbacks<double> defaultCallbacks;
-	//	Singleton<UniWrapperCalbacksHolder<double> >().setCallbacks(defaultCallbacks);
-
-	//	UniWrapperFundamental<double> i = 4.0;
-	//	++i;
-	//	i++;
-	//	--i;
-	//	i--;
-	//	float k = 4.0 + i;
-	//	float kk = i + 4.0;
-	//	double* kkk = &i;
-	//	//k = i % UniWrapperFundamental<float>(16);  // Unsupported by C/C++ design so not implemented in the Wrapper
-	//}
-
-	//{
-	//	std::cout << std::endl << std::endl << std::endl << "TEST - CHAR*" << std::endl << std::endl;
-
-	//	MyUniWrapperCalbacks<char*> myCallbacks;
-	//	Singleton<UniWrapperCalbacksHolder<char*> >().setCallbacks(myCallbacks);
-
-	//	char* originalWord = "Hello Word";
-	//	std::cout << originalWord << std::endl;
-	//	UniWrapperPointer<char*> word = originalWord;
-	//	assert(originalWord == word);
-	//	std::cout << originalWord << std::endl;
-
-	//	char* secondWord1 = word + 6;
-	//	char* secondWord2 = 6 + word;
-	//	assert(secondWord1 == secondWord2);
-	//	char* firstWord = secondWord2 - 6;
-	//	assert(originalWord == word);
-	//	assert(firstWord == word);
-
-	//	std::cout << originalWord << std::endl;
-	//	std::cout << word << std::endl;
-	//	std::cout << firstWord << std::endl;
-	//	std::cout << secondWord1 << std::endl;
-	//	std::cout << secondWord2 << std::endl;
-
-	//	char firstCharOfTheSecondWord = word[6];
-	//	std::cout << firstCharOfTheSecondWord << std::endl;
-	//}
 
 	std::cout << std::endl;
 	std::cout << ">> ========================================================================" << std::endl;
