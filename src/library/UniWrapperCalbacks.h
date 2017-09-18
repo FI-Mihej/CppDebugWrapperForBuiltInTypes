@@ -7,20 +7,20 @@
 
 enum UniWrapperCallbacks {
 	wrapperConstructed,
+	wrapperDestructed,
+
 	valueConstructed,
 	valueAssigned,
 	valueModified,
 	valueWritten,
 
 	valueDestructed,
-	wrapperDestructed,
-
-	classConvertedToValueType,
 
 	refferenceToValueReturned,
 	pointerToValueReturned,
 	linkToValueReturned,
 
+	classConvertedToValueType,
 	constRefferenceToValueReturned,
 	valueWasRead,
 
@@ -59,7 +59,7 @@ public:
 	virtual void valueWritten(T value) {}; // Any change
 	virtual void valueDestructed(T value) {};
 	virtual void wrapperDestructed() {};
-	virtual void classConvertedToValueType(T value) {}; // Read
+	virtual void classConvertedToValueType(T value) {}; // Any read
 	virtual void refferenceToValueReturned(T value) {};
 	virtual void pointerToValueReturned(T value) {};
 	virtual void linkToValueReturned(T value) {}; // Any type of links was returned from the class
@@ -79,8 +79,10 @@ class UniWrapperCalbacksHolder
 public:
 	UniWrapperCalbacksHolder() 
 		:callbacks(nullptr)
-	{};
-	~UniWrapperCalbacksHolder() {};
+	{}
+
+	~UniWrapperCalbacksHolder()
+	{}
 
 	UniWrapperCalbacks<T>& getCallbacks()
 	{
@@ -89,10 +91,12 @@ public:
 		else
 			return defaultCallbacks;
 	}
+
 	void setCallbacks(UniWrapperCalbacks<T>& callbacks)
 	{
 		this->callbacks = &callbacks;
 	}
+
 	void clearCallbacks()
 	{
 		this->callbacks = nullptr;
